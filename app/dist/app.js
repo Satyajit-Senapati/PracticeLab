@@ -270,7 +270,7 @@ async function detectLocalMode() {
 
 async function loadCatalog() {
   state.localMode = await detectLocalMode();
-  if (!state.localMode) throw new Error("Start the local app with node practice_app/server.mjs serve, then open http://127.0.0.1:8765.");
+  if (!state.localMode) throw new Error("Start the local app with node app/server.mjs serve, then open http://127.0.0.1:8765.");
   elements.addModeNote.textContent = "Saves the problem and reference solution in problems/, with its title, starter code, and tests in practice_specs/.";
 
   const response = await fetch("/api/problems", { cache: "no-store" });

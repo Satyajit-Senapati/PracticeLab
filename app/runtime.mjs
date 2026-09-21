@@ -12,7 +12,7 @@ export async function assertLocalRuntime() {
   for (const name of RUNTIME_FILES) {
     const info = await stat(join(RUNTIME_DIR, name)).catch(() => null);
     if (!info?.isFile() || !info.size) {
-      throw new Error("Local Python runtime is missing. Run: node practice_app/setup-runtime.mjs");
+      throw new Error("Local Python runtime is missing. Run: node app/setup-runtime.mjs");
     }
   }
 }

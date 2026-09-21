@@ -10,7 +10,7 @@ import { RUNTIME_VERSION, RUNTIME_FILES } from "../runtime.mjs";
 
 test("catalog and local creation preserve content and validate inputs", async (t) => {
   const fixture = await mkdtemp(join(tmpdir(), "practice-lab-test-"));
-  const app = join(fixture, "practice_app");
+  const app = join(fixture, "app");
   let child;
   t.after(async () => {
     if (child && child.exitCode === null) { const exited = once(child, "exit"); child.kill(); await exited; }

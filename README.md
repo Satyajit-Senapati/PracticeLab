@@ -4,10 +4,10 @@ This repo is both a collection of Python problem/solution files and an interacti
 
 ## Open the practice workspace
 
-Node.js is the only local requirement. The Python runtime is already saved in this project's `practice_app/dist/vendor/` folder. From the repository root, run:
+Node.js is the only local requirement. The Python runtime is already saved in this project's `app/dist/vendor/` folder. From the repository root, run:
 
 ```powershell
-node practice_app/server.mjs serve
+node app/server.mjs serve
 ```
 
 The app opens at `http://127.0.0.1:8765`. It includes:
@@ -24,7 +24,7 @@ Python runs inside an isolated browser worker using the bundled local runtime. N
 If you copy or clone the source without the downloaded runtime, perform this one-time setup while online:
 
 ```powershell
-node practice_app/setup-runtime.mjs
+node app/setup-runtime.mjs
 ```
 
 The setup script downloads the pinned Pyodide runtime and license. After setup, the app serves those files locally. Extra third-party Python packages are not bundled. See [Pyodide's self-hosting documentation](https://pyodide.org/en/stable/usage/downloading-and-deploying.html).
@@ -57,7 +57,7 @@ def solve(values):
 Refresh the page after adding or editing files manually. The app reads the current files on each page load. To regenerate its catalog for validation, run:
 
 ```powershell
-node practice_app/server.mjs build
+node app/server.mjs build
 ```
 
 ## Optional starter code and tests
@@ -87,17 +87,17 @@ Module mode keeps exercises named `enum.py` and `dataclasses.py` from shadowing 
 ## Check the project
 
 ```powershell
-node practice_app/server.mjs build
-node practice_app/validate.mjs
-node --test practice_app/tests/*.test.mjs
-python -B practice_app/tests/corpus_check.py
+node app/server.mjs build
+node app/validate.mjs
+node --test app/tests/*.test.mjs
+python -B app/tests/corpus_check.py
 ```
 
 The checks cover catalog integrity, saving and runner regressions, local problem creation, offline Python startup, Python syntax, and the corrected reference examples. Some exercises still have statements only; the workspace labels those as missing a reference solution.
 
 ## Local data and backups
 
-Problems and reference solutions live in `problems/`; titles and optional starter/test overrides live in `practice_specs/`. Back up these folders together with the app. Copy `practice_app/dist/vendor/` too if the destination computer must work offline immediately.
+Problems and reference solutions live in `problems/`; titles and optional starter/test overrides live in `practice_specs/`. Back up these folders together with the app. Copy `app/dist/vendor/` too if the destination computer must work offline immediately.
 
 Drafts and solved/attempted progress stay in your browser's storage. Use the same browser and `http://127.0.0.1:8765` to return to them; a different hostname or port has separate storage. Clearing browser data removes those drafts.
 
@@ -110,8 +110,8 @@ This project is intentionally local only. It has no active hosting manifest or d
 ```text
 problems/*.py                problem statements and reference solutions
 practice_specs/              optional per-problem starter/test overrides
-practice_app/server.mjs      local catalog builder and server
-practice_app/dist/           browser application and generated catalog
-practice_app/dist/vendor/    locally installed Python runtime (not Git-tracked)
-practice_app/setup-runtime.mjs  one-time runtime download for a fresh checkout
+app/server.mjs      local catalog builder and server
+app/dist/           browser application and generated catalog
+app/dist/vendor/    locally installed Python runtime (not Git-tracked)
+app/setup-runtime.mjs  one-time runtime download for a fresh checkout
 ```

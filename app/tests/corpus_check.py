@@ -66,7 +66,7 @@ class CorpusChecks(unittest.TestCase):
         importlib.import_module("problems.enum")
 
     def test_browser_runner_python_harness(self):
-        source = (REPO / "practice_app" / "dist" / "python-worker.js").read_text(encoding="utf-8")
+        source = (REPO / "app" / "dist" / "python-worker.js").read_text(encoding="utf-8")
         harness = source.split("runPythonAsync(`\n", 1)[1].split("\n    `);", 1)[0].replace("\\\\", "\\")
         tree = ast.parse(harness)
         result_expression = compile(ast.Expression(tree.body[-1].value), "runner_result", "eval")

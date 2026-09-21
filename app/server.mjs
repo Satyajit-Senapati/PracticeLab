@@ -576,7 +576,7 @@ async function main() {
     return;
   }
   if (command !== "serve") {
-    console.error("Usage: node practice_app/server.mjs [serve|build] [--port 8765] [--no-browser]");
+    console.error("Usage: node app/server.mjs [serve|build] [--port 8765] [--no-browser]");
     process.exitCode = 1;
     return;
   }
