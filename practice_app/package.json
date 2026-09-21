@@ -1,0 +1,12 @@
+{
+  "name": "python-practice-lab",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "setup": "node setup-runtime.mjs",
+    "start": "node server.mjs serve",
+    "build": "node server.mjs build",
+    "check": "node validate.mjs",
+    "test": "node --test tests/*.test.mjs"
+  }
+}

@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Browse Python practice problems, write solutions, run tests, and track progress in one focused workspace."
+    />
+    <meta name="theme-color" content="#030303" />
+    <title>Practice Lab</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <symbol id="icon-terminal" viewBox="0 0 24 24"><path d="m5 7 5 5-5 5M13 17h6" /></symbol>
+      <symbol id="icon-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 4 4" /></symbol>
+      <symbol id="icon-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" /></symbol>
+      <symbol id="icon-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6" /></symbol>
+      <symbol id="icon-play" viewBox="0 0 24 24"><path d="m8 5 11 7-11 7Z" /></symbol>
+      <symbol id="icon-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6" /></symbol>
+      <symbol id="icon-reset" viewBox="0 0 24 24"><path d="M3 10a9 9 0 1 1 2 8M3 4v6h6" /></symbol>
+      <symbol id="icon-keyboard" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2" /><path d="M6 9h.01M10 9h.01M14 9h.01M18 9h.01M6 12h.01M10 12h.01M14 12h.01M18 12h.01M7 15h10" /></symbol>
+    </svg>
+    <a class="skip-link" href="#problem-content">Skip to problem</a>
+
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Practice Lab home">
+        <span class="brand-mark" aria-hidden="true"><svg class="icon"><use href="#icon-terminal" /></svg></span>
+        <span>
+          <strong>Practice</strong>
+          <small>Lab</small>
+        </span>
+      </a>
+
+      <div class="topbar-actions">
+        <div class="runtime-pill" id="runtime-pill" role="status" title="Python runs in an isolated browser worker">
+          <span class="runtime-indicator" aria-hidden="true"></span>
+          <span id="runtime-label">Python sleeping</span>
+        </div>
+        <button class="button button-secondary" id="shortcuts-button" type="button" aria-haspopup="dialog">
+          <svg class="icon" aria-hidden="true"><use href="#icon-keyboard" /></svg> Shortcuts
+        </button>
+        <button class="button button-primary" id="add-problem-button" type="button" aria-haspopup="dialog">
+          <svg class="icon" aria-hidden="true"><use href="#icon-plus" /></svg> Add problem
+        </button>
+      </div>
+    </header>
+
+    <main class="app-shell">
+      <aside class="library-panel" aria-label="Problem library">
+        <div class="library-heading">
+          <div>
+            <p class="eyebrow">Your library</p>
+            <h1><span id="problem-count">—</span> problems</h1>
+          </div>
+          <div class="progress-ring" id="progress-ring" aria-label="0 percent complete" style="--progress: 0">
+            <span id="progress-percent">0%</span>
+          </div>
+        </div>
+
+        <label class="search-box" for="problem-search">
+          <svg class="icon" aria-hidden="true"><use href="#icon-search" /></svg>
+          <input id="problem-search" type="search" aria-label="Search problems by title or concept" placeholder="Search title or concept" autocomplete="off" />
+          <kbd>Ctrl K</kbd>
+        </label>
+
+        <div class="filter-row" id="difficulty-filters" aria-label="Filter by difficulty">
+          <button class="filter-chip is-active" type="button" data-filter="all" aria-pressed="true">All</button>
+          <button class="filter-chip" type="button" data-filter="Easy" aria-pressed="false">Easy</button>
+          <button class="filter-chip" type="button" data-filter="Medium" aria-pressed="false">Medium</button>
+          <button class="filter-chip" type="button" data-filter="Hard" aria-pressed="false">Hard</button>
+        </div>
+
+        <label class="select-label" for="topic-filter">
+          <span>Topic</span>
+          <select id="topic-filter">
+            <option value="all">All topics</option>
+          </select>
+        </label>
+
+        <div class="problem-list" id="problem-list" aria-label="Problems">
+          <div class="loading-list" aria-live="polite">
+            <span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+        <p class="empty-list" id="empty-list" hidden>No problems match those filters.</p>
+      </aside>
+
+      <section class="problem-panel" id="problem-content" aria-labelledby="problem-title" tabindex="-1">
+        <div class="problem-header">
+          <div>
+            <div class="problem-meta" id="problem-meta"></div>
+            <h2 id="problem-title">Loading your practice library…</h2>
+            <p class="file-name" id="file-name"></p>
+          </div>
+          <button class="solve-button" id="solve-button" type="button" aria-label="Mark as solved" aria-pressed="false" disabled>
+            <span class="solve-check" aria-hidden="true"><svg class="icon"><use href="#icon-check" /></svg></span>
+            <span id="solve-label">Mark solved</span>
+          </button>
+        </div>
+
+        <div class="tabs" role="tablist" aria-label="Problem information">
+          <button class="tab is-active" id="prompt-tab" type="button" role="tab" aria-selected="true" aria-controls="prompt-view">
+            Prompt
+          </button>
+          <button class="tab" id="solution-tab" type="button" role="tab" aria-selected="false" aria-controls="solution-view" tabindex="-1">
+            Solution
+          </button>
+        </div>
+
+        <div class="problem-scroll">
+          <article id="prompt-view" role="tabpanel" aria-labelledby="prompt-tab"></article>
+          <article id="solution-view" role="tabpanel" aria-labelledby="solution-tab" hidden></article>
+        </div>
+      </section>
+
+      <section class="workbench-panel" aria-label="Code workbench">
+        <div class="workbench-header">
+          <div>
+            <p class="eyebrow">Workbench</p>
+            <h2>solution.py</h2>
+          </div>
+          <div class="editor-actions">
+            <button class="button button-ghost" id="reset-button" type="button" disabled><svg class="icon" aria-hidden="true"><use href="#icon-reset" /></svg> Reset</button>
+            <button class="button button-run" id="run-button" type="button" disabled>
+              <svg class="icon" aria-hidden="true"><use href="#icon-play" /></svg>
+              <span id="run-label">Run code</span>
+              <kbd>Ctrl ↵</kbd>
+            </button>
+          </div>
+        </div>
+
+        <div class="editor-wrap">
+          <div class="line-numbers" id="line-numbers" aria-hidden="true">1</div>
+          <textarea
+            id="code-editor"
+            aria-label="Python solution editor"
+            autocomplete="off"
+            autocapitalize="off"
+            spellcheck="false"
+            wrap="off"
+            disabled
+          ></textarea>
+        </div>
+
+        <div class="test-drawer">
+          <div class="tabs compact-tabs" role="tablist" aria-label="Run configuration">
+            <button class="tab is-active" id="tests-tab" type="button" role="tab" aria-selected="true" aria-controls="tests-view">
+              Tests
+            </button>
+            <button class="tab" id="input-tab" type="button" role="tab" aria-selected="false" aria-controls="input-view" tabindex="-1">
+              Standard input
+            </button>
+            <span class="autosave-status" id="autosave-status">Drafts save automatically</span>
+          </div>
+          <div id="tests-view" role="tabpanel" aria-labelledby="tests-tab">
+            <textarea id="tests-editor" aria-label="Python test code" spellcheck="false" autocomplete="off" autocapitalize="off" wrap="off" disabled></textarea>
+          </div>
+          <div id="input-view" role="tabpanel" aria-labelledby="input-tab" hidden>
+            <textarea id="stdin-editor" aria-label="Standard input" spellcheck="false" autocapitalize="off" placeholder="Optional input() values, one per line" disabled></textarea>
+          </div>
+        </div>
+
+        <div class="console-panel">
+          <div class="console-header">
+            <div>
+              <svg class="icon" aria-hidden="true"><use href="#icon-terminal" /></svg>
+              Console
+            </div>
+            <div class="console-meta">
+              <span id="execution-time"></span>
+              <button id="clear-console" type="button">Clear</button>
+            </div>
+          </div>
+          <pre class="console-output" id="console-output" aria-live="polite"><span class="console-muted">Run your code to see output here.</span></pre>
+        </div>
+      </section>
+    </main>
+
+    <div class="toast-region" id="toast-region" aria-live="polite" aria-atomic="true"></div>
+
+    <dialog class="modal" id="add-problem-dialog" aria-labelledby="add-problem-title" aria-describedby="add-mode-note">
+      <form method="dialog" id="add-problem-form">
+        <div class="modal-header">
+          <div>
+            <p class="eyebrow">Grow your library</p>
+            <h2 id="add-problem-title">Add a practice problem</h2>
+          </div>
+          <button class="icon-button" id="close-add-problem" aria-label="Close dialog" type="button"><svg class="icon" aria-hidden="true"><use href="#icon-close" /></svg></button>
+        </div>
+        <p class="modal-note" id="add-mode-note">
+          When the local app is running, this creates a new Python file in <code>problems/</code>.
+        </p>
+
+        <div class="form-grid">
+          <label class="field field-wide">
+            <span>Title</span>
+            <input name="title" required maxlength="120" placeholder="e.g. Longest Common Prefix" />
+          </label>
+          <label class="field">
+            <span>Difficulty</span>
+            <select name="difficulty">
+              <option>Easy</option>
+              <option selected>Medium</option>
+              <option>Hard</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Topic</span>
+            <input name="topic" maxlength="100" placeholder="Arrays" />
+          </label>
+          <label class="field field-wide">
+            <span>Problem statement</span>
+            <textarea name="statement" required rows="5" placeholder="Describe what the function should do…"></textarea>
+          </label>
+          <label class="field field-wide">
+            <span>Examples</span>
+            <textarea name="examples" rows="3" placeholder="solve([1, 2, 3]) -> 6"></textarea>
+          </label>
+          <details class="advanced-fields field-wide">
+            <summary>Starter code, tests, and reference solution</summary>
+            <label class="field">
+              <span>Starter code</span>
+              <textarea name="starterCode" rows="5" spellcheck="false" placeholder="def solve(...):&#10;    pass"></textarea>
+            </label>
+            <label class="field">
+              <span>Tests</span>
+              <textarea name="tests" rows="5" spellcheck="false" placeholder="assert solve(...) == ..."></textarea>
+            </label>
+            <label class="field">
+              <span>Reference solution</span>
+              <textarea name="solution" rows="7" spellcheck="false" placeholder="Optional — you can add this later"></textarea>
+            </label>
+          </details>
+        </div>
+
+        <div class="modal-footer">
+          <button class="button button-secondary" id="cancel-add-problem" type="button">Cancel</button>
+          <button class="button button-primary" id="create-problem-button" value="default" type="submit">Create problem</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="modal shortcuts-modal" id="shortcuts-dialog" aria-labelledby="shortcuts-title">
+      <form method="dialog">
+        <div class="modal-header">
+          <div>
+            <p class="eyebrow">Keyboard</p>
+            <h2 id="shortcuts-title">Shortcuts</h2>
+          </div>
+          <button class="icon-button" value="close" aria-label="Close dialog" type="submit"><svg class="icon" aria-hidden="true"><use href="#icon-close" /></svg></button>
+        </div>
+        <dl class="shortcut-list">
+          <div><dt><kbd>Ctrl</kbd> <kbd>Enter</kbd></dt><dd>Run code and tests</dd></div>
+          <div><dt><kbd>Ctrl</kbd> <kbd>K</kbd></dt><dd>Search problems</dd></div>
+          <div><dt><kbd>Tab</kbd></dt><dd>Insert four spaces in an editor</dd></div>
+          <div><dt><kbd>Esc</kbd> then <kbd>Tab</kbd></dt><dd>Leave an editor</dd></div>
+          <div><dt><kbd>Esc</kbd></dt><dd>Close an open dialog</dd></div>
+        </dl>
+      </form>
+    </dialog>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
