@@ -4,7 +4,7 @@
 
 # Practice Lab
 
-**Learn Python. Solve problems. Build confidence.**
+**Learn Python. Solve Problems. Build Confidence.**
 
 A focused local workspace for Python practice, reference solutions, and your next idea.
 
