@@ -28,3 +28,26 @@ Alternative Approaches: Use iterative subset generation with duplicate checks.
 Expected Output: The script prints unique combinations for a sample input.
 Key Takeaways: Sorting and duplicate skipping are crucial in combination generation.
 """
+
+def combination_sum2(candidates: list[int], target: int) -> list[list[int]]:
+    """Use each positive candidate at most once, skipping duplicate combinations."""
+    if any(value <= 0 for value in candidates):
+        raise ValueError("Candidates must be positive.")
+    values = sorted(candidates)
+    result = []
+    def search(start, remaining, path):
+        if remaining == 0:
+            result.append(path.copy())
+            return
+        for index in range(start, len(values)):
+            if index > start and values[index] == values[index - 1]:
+                continue
+            value = values[index]
+            if value > remaining:
+                break
+            path.append(value)
+            search(index + 1, remaining - value, path)
+            path.pop()
+    if target >= 0:
+        search(0, target, [])
+    return result

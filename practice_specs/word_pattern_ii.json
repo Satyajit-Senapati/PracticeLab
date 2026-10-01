@@ -1,0 +1,4 @@
+{
+  "starter_code": "from __future__ import annotations\n\ndef word_pattern_match(pattern: str, text: str) -> bool:\n    raise NotImplementedError\n",
+  "tests": "assert word_pattern_match(\"abab\", \"redblueredblue\")\nassert word_pattern_match(\"aaaa\", \"asdasdasdasd\")\nassert not word_pattern_match(\"ab\", \"aa\")\nassert word_pattern_match(\"\", \"\")\nassert not word_pattern_match(\"a\", \"\")\nprint(\"Example checks passed.\")\n"
+}

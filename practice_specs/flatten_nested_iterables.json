@@ -1,0 +1,6 @@
+{
+  "title": "Flatten Nested Lists Lazily",
+  "category": "Python",
+  "starter_code": "from __future__ import annotations\n\ndef flatten_nested_iterables(values):\n    raise NotImplementedError\n",
+  "tests": "assert list(flatten_nested_iterables([1,[2,(3,4)],\"hi\"])) == [1,2,3,4,\"hi\"]\nassert list(flatten_nested_iterables([[],(),[[]]])) == []\nassert list(flatten_nested_iterables([None, {\"x\": 1}])) == [None, {\"x\": 1}]\nprint(\"Example checks passed.\")\n"
+}

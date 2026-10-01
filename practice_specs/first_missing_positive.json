@@ -1,0 +1,4 @@
+{
+  "starter_code": "from __future__ import annotations\n\ndef first_missing_positive(nums: list[int]) -> int:\n    raise NotImplementedError\n",
+  "tests": "assert first_missing_positive([3,4,-1,1]) == 2\nassert first_missing_positive([1,2,0]) == 3\nassert first_missing_positive([]) == 1\nassert first_missing_positive([1,1]) == 2\nprint(\"Example checks passed.\")\n"
+}

@@ -79,6 +79,20 @@
           </select>
         </label>
 
+        <label class="select-label" for="status-filter">
+          <span>Progress</span>
+          <select id="status-filter">
+            <option value="all">All progress</option>
+            <option value="new">Not started</option>
+            <option value="attempted">Attempted</option>
+            <option value="solved">Solved</option>
+          </select>
+        </label>
+        <div class="library-results">
+          <p id="filter-summary" role="status" aria-live="polite">Loading problems…</p>
+          <button id="clear-filters" type="button" hidden>Clear filters</button>
+        </div>
+
         <div class="problem-list" id="problem-list" aria-label="Problems">
           <div class="loading-list" aria-live="polite">
             <span></span><span></span><span></span><span></span>
@@ -109,13 +123,20 @@
           </button>
         </div>
 
+        <div class="practice-navigation">
+          <span id="practice-status">Not started</span>
+          <button class="button button-secondary" id="jump-to-editor" type="button" disabled>
+            Write solution <span aria-hidden="true">↓</span>
+          </button>
+        </div>
+
         <div class="problem-scroll">
           <article id="prompt-view" role="tabpanel" aria-labelledby="prompt-tab"></article>
           <article id="solution-view" role="tabpanel" aria-labelledby="solution-tab" hidden></article>
         </div>
       </section>
 
-      <section class="workbench-panel" aria-label="Code workbench">
+      <section class="workbench-panel" id="workbench" aria-label="Code workbench">
         <div class="workbench-header">
           <div>
             <p class="eyebrow">Workbench</p>
@@ -152,7 +173,7 @@
             <button class="tab" id="input-tab" type="button" role="tab" aria-selected="false" aria-controls="input-view" tabindex="-1">
               Standard input
             </button>
-            <span class="autosave-status" id="autosave-status">Drafts save automatically</span>
+            <span class="autosave-status" id="autosave-status" role="status">Drafts save automatically</span>
           </div>
           <div id="tests-view" role="tabpanel" aria-labelledby="tests-tab">
             <textarea id="tests-editor" aria-label="Python test code" spellcheck="false" autocomplete="off" autocapitalize="off" wrap="off" disabled></textarea>

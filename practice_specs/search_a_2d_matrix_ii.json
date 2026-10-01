@@ -1,0 +1,4 @@
+{
+  "starter_code": "from __future__ import annotations\n\ndef search_matrix(matrix: list[list[int]], target: int) -> bool:\n    raise NotImplementedError\n",
+  "tests": "matrix = [[1,4,7],[2,5,8],[3,6,9]]\nassert search_matrix(matrix, 4)\nassert search_matrix(matrix, 8)\nassert not search_matrix(matrix, 10)\nassert not search_matrix([], 1)\nprint(\"Example checks passed.\")\n"
+}

@@ -17,6 +17,16 @@ const DATA_FILE = join(DIST_DIR, "data", "problems.json");
 const SPECS_DIR = join(REPO_DIR, "practice_specs");
 let catalogWriteQueue = Promise.resolve();
 
+// Alternate source files remain executable; the library presents one exercise per contract.
+export const PROBLEM_ALIASES = Object.freeze({
+  binary_tree_max_depth: "maximum_depth_of_binary_tree",
+  permute: "permutations",
+  find_ladders: "word_ladder_ii",
+  search_a_2d_matrix_iii: "search_a_2d_matrix_ii",
+  longest_palindrome: "longest_palindromic_substring",
+  meeting_rooms: "meeting_rooms_ii",
+});
+
 const LABELS = [
   "Problem Statement",
   "Interview Difficulty",
@@ -285,10 +295,18 @@ export async function scanCatalog() {
     .filter((entry) => entry.isFile() && entry.name.toLowerCase().endsWith(".py"))
     .map((entry) => entry.name)
     .sort((a, b) => a.localeCompare(b));
-  const problems = await Promise.all(fileNames.map(problemFromFile));
+  const sourceIds = new Set(fileNames.map((name) => name.slice(0, -3).toLowerCase()));
+  const aliases = Object.entries(PROBLEM_ALIASES)
+    .filter(([alias, canonical]) => sourceIds.has(alias) && sourceIds.has(canonical));
+  const excluded = new Set(aliases.map(([alias]) => alias));
+  const canonicalFiles = fileNames.filter((name) => !excluded.has(name.slice(0, -3).toLowerCase()));
+  const problems = await Promise.all(canonicalFiles.map(problemFromFile));
+  for (const problem of problems) {
+    problem.aliases = aliases.filter(([, canonical]) => canonical === problem.id).map(([alias]) => alias);
+  }
   problems.sort((a, b) => a.title.localeCompare(b.title));
 
-  return { sourceCount: problems.length, problems };
+  return { sourceCount: problems.length, sourceFileCount: fileNames.length, problems };
 }
 
 export async function buildCatalog() {

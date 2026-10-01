@@ -15,9 +15,9 @@ iterables to demonstrate operator semantics.
 Output Description: The functions return computed results, boolean decisions,
 and collections that reflect correct operator usage.
 Example Inputs and Outputs:
-    arithmetic_operations(5, 3) -> {'sum': 8, 'difference': 2, 'product': 15, 'quotient': 1.6667}
-    comparison_operations(5, 3) -> {'equal': False, 'greater': True}
-    logical_operations(True, False) -> {'and': False, 'or': True, 'not_first': False}
+    arithmetic_operations(5, 3) -> {'sum': 8, 'difference': 2, 'product': 15, 'quotient': 1.6666666666666667, 'power': 125, 'modulo': 2}
+    comparison_operations(5, 3) -> {'equal': False, 'not_equal': True, 'greater': True, 'greater_or_equal': True, 'less': False, 'less_or_equal': False}
+    logical_operations(True, False) -> {'and': False, 'or': True, 'not_first': False, 'not_second': True}
 Constraints: Use Python best practices, type hints, meaningful variable names,
 and avoid side effects in demonstration functions.
 Brute Force Approach: Write separate expressions inline without reusable

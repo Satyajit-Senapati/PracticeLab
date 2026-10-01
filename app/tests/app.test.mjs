@@ -86,6 +86,33 @@ test("corrupt storage shapes and malformed URL hashes are recoverable", () => {
   assert.equal(run("requestedProblemId()"), "");
 });
 
+test("progress filters and result summaries reflect the current drafts", () => {
+  const { run, node } = harness();
+  run("state.progress.alpha = {status: 'solved'}; state.status = 'solved'; applyFilters();");
+  assert.equal(run("state.filtered.length"), 1);
+  assert.equal(run("state.filtered[0].id"), "alpha");
+  assert.equal(node("#filter-summary").textContent, "1 of 2 shown");
+  assert.equal(node("#clear-filters").hidden, false);
+  run("state.status = 'attempted'; applyFilters();");
+  assert.equal(node("#empty-list").hidden, false);
+  run("state.status = 'all'; applyFilters();");
+  assert.equal(node("#clear-filters").hidden, true);
+});
+
+test("duplicate aliases preserve the latest draft, progress, and original records", () => {
+  const { run, node } = harness();
+  run(`state.problems[0].aliases = ["old_alpha"];
+    state.progress.alpha = {code: "older", updatedAt: "2026-01-01", status: "new"};
+    state.progress.old_alpha = {code: "latest", updatedAt: "2026-02-01", status: "solved"};
+    state.selectedId = null; migrateAliasProgress(); selectProblem("old_alpha");`);
+  assert.equal(run("state.selectedId"), "alpha");
+  assert.equal(node("#code-editor").value, "latest");
+  assert.equal(run("statusFor(state.problems[0])"), "solved");
+  assert.equal(run("state.progress.old_alpha.code"), "latest");
+  run("state.progress.alpha.status = 'attempted'; migrateAliasProgress();");
+  assert.equal(run("statusFor(state.problems[0])"), "attempted");
+});
+
 test("topic refresh preserves the selected filter", () => {
   const { run, node } = harness();
   run("state.topic = 'Arrays'; populateTopics();");

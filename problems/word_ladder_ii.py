@@ -46,10 +46,12 @@ def build_graph(words: List[str]) -> Dict[str, List[str]]:
 
 
 def find_ladders(beginWord: str, endWord: str, wordList: List[str]) -> List[List[str]]:
+    if beginWord == endWord:
+        return [[beginWord]]
     if endWord not in wordList:
         return []
-    wordList.append(beginWord)
-    graph = build_graph(wordList)
+    words = sorted(set(wordList) | {beginWord})
+    graph = build_graph(words)
     distances: Dict[str, int] = {beginWord: 0}
     queue = deque([beginWord])
 

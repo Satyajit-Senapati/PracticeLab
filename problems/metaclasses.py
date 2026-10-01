@@ -16,8 +16,8 @@ subclass creation.
 Output Description: The module returns classes and instances whose creation is
 influenced by metaclass constraints and registration.
 Example Inputs and Outputs:
-    class Plugin(BasePlugin): ... -> validated subclass registration
-    plugins = PluginRegistry.plugins -> ['MyPlugin']
+    MyPlugin().run() -> "MyPlugin executed"
+    PluginRegistryMeta.plugins -> ['MyPlugin', 'AnotherPlugin']
 Constraints: Use metaclasses sparingly, keep metaclass behavior clear, and
 avoid excessive complexity in class creation.
 Brute Force Approach: Use manual registration and runtime validation.

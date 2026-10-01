@@ -1,0 +1,4 @@
+{
+  "starter_code": "from __future__ import annotations\n\ndef letter_combinations(digits: str) -> list[str]:\n    raise NotImplementedError\n",
+  "tests": "assert letter_combinations(\"23\") == [\"ad\",\"ae\",\"af\",\"bd\",\"be\",\"bf\",\"cd\",\"ce\",\"cf\"]\nassert letter_combinations(\"\") == []\nassert len(letter_combinations(\"79\")) == 16\nprint(\"Example checks passed.\")\n"
+}

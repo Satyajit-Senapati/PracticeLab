@@ -1,0 +1,4 @@
+{
+  "starter_code": "from __future__ import annotations\n\ndef combination_sum2(candidates: list[int], target: int) -> list[list[int]]:\n    raise NotImplementedError\n",
+  "tests": "assert {tuple(x) for x in combination_sum2([10,1,2,7,6,1,5], 8)} == {(1,1,6),(1,2,5),(1,7),(2,6)}\nassert combination_sum2([1,1,1], 2) == [[1,1]]\nassert combination_sum2([], 0) == [[]]\nprint(\"Example checks passed.\")\n"
+}

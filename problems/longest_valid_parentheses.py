@@ -30,3 +30,20 @@ Alternative Approaches: Use two-pass left-right scan.
 Expected Output: The script prints longest valid parentheses lengths for sample inputs.
 Key Takeaways: Tracking indices of unmatched parentheses gives valid substring lengths efficiently.
 """
+
+def longest_valid_parentheses(text: str) -> int:
+    """Return the longest balanced substring using unmatched-position boundaries."""
+    stack = [-1]
+    longest = 0
+    for index, char in enumerate(text):
+        if char == "(":
+            stack.append(index)
+        elif char == ")":
+            stack.pop()
+            if not stack:
+                stack.append(index)
+            else:
+                longest = max(longest, index - stack[-1])
+        else:
+            raise ValueError("Only parentheses are supported.")
+    return longest

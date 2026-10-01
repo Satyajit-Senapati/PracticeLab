@@ -10,7 +10,7 @@ import { assertLocalRuntime } from "./runtime.mjs";
 const appDir = dirname(fileURLToPath(import.meta.url));
 const distDir = resolve(appDir, "dist");
 
-for (const file of ["server.mjs", "validate.mjs", "runtime.mjs", "setup-runtime.mjs", "dist/app.js", "dist/python-worker.js", "dist/problem-format.js"]) {
+for (const file of ["server.mjs", "validate.mjs", "runtime.mjs", "setup-runtime.mjs", "dist/app.js", "dist/python-worker.js", "dist/problem-format.js", "tests/browser-audit.mjs"]) {
   const result = spawnSync(process.execPath, ["--check", resolve(appDir, file)], { encoding: "utf8" });
   assert.equal(result.status, 0, result.stderr || `${file} did not pass the JavaScript syntax check.`);
 }
@@ -27,6 +27,10 @@ assert.deepEqual(savedCatalog, liveCatalog, "The static catalog is stale. Run th
 assert.ok(savedCatalog.sourceCount > 0, "The catalog is empty.");
 assert.equal(savedCatalog.sourceCount, savedCatalog.problems.length, "The catalog count is incorrect.");
 assert.equal(new Set(savedCatalog.problems.map((problem) => problem.id)).size, savedCatalog.problems.length, "Problem ids must be unique.");
+const allIds = savedCatalog.problems.flatMap((problem) => [problem.id, ...(problem.aliases ?? [])]);
+assert.equal(new Set(allIds).size, allIds.length, "Aliases must be unique and separate from canonical ids.");
+const statements = savedCatalog.problems.map((problem) => problem.statement.toLowerCase().replace(/[^a-z0-9]/g, ""));
+assert.equal(new Set(statements).size, statements.length, "Exact duplicate problem statements need review.");
 
 for (const problem of savedCatalog.problems) {
   assert.ok(problem.id && problem.file && problem.title, "Every problem needs an id, file, and title.");

@@ -39,3 +39,18 @@ Alternative Approaches: Use two lists of indices to compare first occurrences.
 Expected Output: The script prints pattern matching results for sample inputs.
 Key Takeaways: Maintain bidirectional mappings to enforce bijective pattern matching.
 """
+
+def word_pattern(pattern: str, text: str) -> bool:
+    """Enforce a bijection between characters and whitespace-delimited words."""
+    words = text.split()
+    if len(pattern) != len(words):
+        return False
+    forward, backward = {}, {}
+    for char, word in zip(pattern, words):
+        if char in forward and forward[char] != word:
+            return False
+        if word in backward and backward[word] != char:
+            return False
+        forward[char] = word
+        backward[word] = char
+    return True

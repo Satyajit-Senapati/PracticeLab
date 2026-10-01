@@ -82,6 +82,14 @@ test("catalog and local creation preserve content and validate inputs", async (t
   assert.equal(catalog.sourceCount, 4);
 
   const { scanCatalog } = await import(pathToFileURL(join(app, "server.mjs")).href);
+  for (const name of ["permute", "permutations"]) {
+    await writeFile(join(fixture, "problems", name + ".py"), `"""\nProblem Statement: Permutations\nInterview Difficulty: Medium\n"""\ndef permute(values):\n    return [values]\n`);
+  }
+  const deduplicated = await scanCatalog();
+  assert.equal(deduplicated.sourceFileCount, 6);
+  assert.equal(deduplicated.sourceCount, 5);
+  assert.deepEqual(deduplicated.problems.find(problem => problem.id === "permutations").aliases, ["permute"]);
+  assert.ok(!deduplicated.problems.some(problem => problem.id === "permute"));
   await writeFile(join(fixture, "practice_specs", "base.json"), '{"starter_code":[]}');
   await assert.rejects(scanCatalog(), /starter_code must be text/);
 });

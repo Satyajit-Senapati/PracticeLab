@@ -1,0 +1,4 @@
+{
+  "starter_code": "from __future__ import annotations\n\ndef schedule_course(courses: list[list[int]]) -> int:\n    raise NotImplementedError\n",
+  "tests": "assert schedule_course([[100,200],[200,1300],[1000,1250],[2000,3200]]) == 3\nassert schedule_course([[5,5],[4,6],[2,6]]) == 2\nassert schedule_course([]) == 0\nprint(\"Example checks passed.\")\n"
+}

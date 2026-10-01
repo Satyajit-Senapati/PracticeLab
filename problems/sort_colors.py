@@ -14,7 +14,8 @@ and 2.
 Output Description: Functions modify the list in-place to group values as
 [0, 0, ..., 1, 1, ..., 2, 2, ...].
 Example Inputs and Outputs:
-    sort_colors([2,0,2,1,1,0]) -> [0,0,1,1,2,2]
+    nums = [2,0,2,1,1,0]
+    sort_colors(nums) -> None; nums becomes [0,0,1,1,2,2]
 Constraints: Use O(n) time and O(1) space; do not use built-in sorting.
 Brute Force Approach: Count each value and write them back.
 Optimized Approach: Use Dutch National Flag algorithm with three pointers.
@@ -23,7 +24,7 @@ Space Complexity: O(1)
 Step-by-step Dry Run:
     nums = [2,0,2,1,1,0]
     left=0, mid=0, right=5
-    return [0,0,1,1,2,2]
+    nums is now [0,0,1,1,2,2]; the function returns None.
 Edge Cases: empty list, already sorted array, and all identical values.
 Common Mistakes: incorrect pointer updates, swapping with wrong values, and
 not handling 1s properly.

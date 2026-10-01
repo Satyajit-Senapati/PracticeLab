@@ -1,0 +1,6 @@
+{
+  "title": "Shortest Paths in a Weighted Graph",
+  "category": "Graphs",
+  "starter_code": "from __future__ import annotations\n\ndef dijkstra_shortest_paths(graph: dict, start) -> dict:\n    raise NotImplementedError\n",
+  "tests": "assert dijkstra_shortest_paths({\"a\":[(\"b\",4),(\"c\",1)],\"c\":[(\"b\",2)]}, \"a\") == {\"a\":0,\"c\":1,\"b\":3}\nassert dijkstra_shortest_paths({\"a\":[(\"b\",0)]}, \"a\") == {\"a\":0,\"b\":0}\nassert dijkstra_shortest_paths({}, \"start\") == {\"start\":0}\nprint(\"Example checks passed.\")\n"
+}

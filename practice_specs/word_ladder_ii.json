@@ -1,0 +1,4 @@
+{
+  "starter_code": "from __future__ import annotations\n\ndef find_ladders(beginWord: str, endWord: str, wordList: list[str]) -> list[list[str]]:\n    raise NotImplementedError\n",
+  "tests": "words = [\"hot\",\"dot\",\"dog\",\"lot\",\"log\",\"cog\",\"cog\"]\nbefore = words.copy()\npaths = find_ladders(\"hit\",\"cog\",words)\nassert {tuple(path) for path in paths} == {(\"hit\",\"hot\",\"dot\",\"dog\",\"cog\"),(\"hit\",\"hot\",\"lot\",\"log\",\"cog\")}\nassert len(paths) == 2\nassert words == before\nassert find_ladders(\"same\",\"same\",[]) == [[\"same\"]]\nprint(\"Example checks passed.\")\n"
+}

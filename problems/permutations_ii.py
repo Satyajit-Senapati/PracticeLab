@@ -29,3 +29,23 @@ Alternative Approaches: Use next_permutation on sorted sequence.
 Expected Output: The script prints all unique permutations for a sample input.
 Key Takeaways: Duplicate-aware backtracking generates unique permutations efficiently.
 """
+
+from collections import Counter
+
+def permute_unique(nums: list[int]) -> list[list[int]]:
+    """Return unique permutations without changing the input."""
+    counts = Counter(nums)
+    result = []
+    def search(path):
+        if len(path) == len(nums):
+            result.append(path.copy())
+            return
+        for value in sorted(counts):
+            if counts[value]:
+                counts[value] -= 1
+                path.append(value)
+                search(path)
+                path.pop()
+                counts[value] += 1
+    search([])
+    return result

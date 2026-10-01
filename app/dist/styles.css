@@ -464,6 +464,36 @@ kbd {
   font-size: 0.875rem;
 }
 
+.library-results {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-height: 32px;
+  margin: 0 0.2rem 0.5rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.library-results p { margin: 0; }
+#clear-filters {
+  border: 0;
+  padding: 0.3rem;
+  color: var(--cyan);
+  background: transparent;
+  font-size: inherit;
+}
+.practice-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding: 0.6rem 1.2rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted-strong);
+  font-size: 0.8rem;
+}
+.practice-navigation .button { min-height: 36px; }
 .problem-list {
   min-height: 0;
   flex: 1;
@@ -1246,10 +1276,9 @@ kbd {
     padding-block: 0.7rem;
   }
 
-  .brand small,
-  #shortcuts-button {
-    display: none;
-  }
+  .brand small { display: none; }
+  #shortcuts-button { padding-inline: 0.6rem; font-size: 0; }
+  #shortcuts-button .icon { width: 1.1rem; height: 1.1rem; }
 
   .topbar-actions { flex-wrap: wrap; }
   .runtime-pill { font-size: 0.75rem; padding-inline: 0.5rem; }
@@ -1262,14 +1291,20 @@ kbd {
   .library-panel {
     position: static;
     height: auto;
-    max-height: 430px;
+    max-height: none;
     border-right: 0;
     border-bottom: 1px solid var(--line);
   }
 
   .problem-list {
-    min-height: 170px;
+    min-height: 0;
+    height: 200px;
+    flex: 0 0 200px;
   }
+  .button, .filter-chip, .icon-button, .solve-button,
+  .select-label select, #clear-filters, .practice-navigation .button { min-height: 44px; }
+  .practice-navigation { padding-inline: 0.9rem; }
+  #code-editor, #tests-editor, #stdin-editor { font-size: 16px; }
 
   .problem-panel {
     height: 680px;
@@ -1286,7 +1321,10 @@ kbd {
     padding-inline: 0.9rem;
   }
 
-  .workbench-header { gap: 0.65rem; }
+  .workbench-header { gap: 0.65rem; flex-wrap: wrap; }
+  .topbar-actions { min-width: 0; max-width: 100%; }
+  .runtime-pill { min-width: 0; max-width: 100%; }
+  #runtime-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .editor-actions { flex-wrap: wrap; }
   .autosave-status { padding: 0.35rem; }
   .shortcut-list div { flex-wrap: wrap; }

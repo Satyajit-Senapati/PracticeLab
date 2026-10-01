@@ -29,3 +29,24 @@ Alternative Approaches: Use DP to build combination sets.
 Expected Output: The script prints unique combination sets for a sample input.
 Key Takeaways: Backtracking with sorted input avoids duplicate combination generation.
 """
+
+def combination_sum(candidates: list[int], target: int) -> list[list[int]]:
+    """Use positive candidates repeatedly without mutating the input."""
+    if any(value <= 0 for value in candidates):
+        raise ValueError("Candidates must be positive.")
+    values = sorted(set(candidates))
+    result = []
+    def search(start, remaining, path):
+        if remaining == 0:
+            result.append(path.copy())
+            return
+        for index in range(start, len(values)):
+            value = values[index]
+            if value > remaining:
+                break
+            path.append(value)
+            search(index, remaining - value, path)
+            path.pop()
+    if target >= 0:
+        search(0, target, [])
+    return result

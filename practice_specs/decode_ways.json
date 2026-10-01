@@ -1,0 +1,4 @@
+{
+  "starter_code": "from __future__ import annotations\n\ndef num_decodings(text: str) -> int:\n    raise NotImplementedError\n",
+  "tests": "assert num_decodings(\"12\") == 2\nassert num_decodings(\"226\") == 3\nassert num_decodings(\"06\") == 0\nassert num_decodings(\"10\") == 1\nassert num_decodings(\"2101\") == 1\nassert num_decodings(\"\") == 0\nprint(\"Example checks passed.\")\n"
+}

@@ -29,3 +29,30 @@ Alternative Approaches: Use DFS-based topsort or Kahn's BFS.
 Expected Output: The script prints a valid alien dictionary order for a sample input.
 Key Takeaways: Topological sort recovers order from precedence constraints.
 """
+
+from collections import deque
+
+def alien_order(words: list[str]) -> str:
+    """Return any valid character ordering; return empty for invalid dictionaries."""
+    graph = {char: set() for word in words for char in word}
+    indegree = dict.fromkeys(graph, 0)
+    for first, second in zip(words, words[1:]):
+        for left, right in zip(first, second):
+            if left != right:
+                if right not in graph[left]:
+                    graph[left].add(right)
+                    indegree[right] += 1
+                break
+        else:
+            if len(first) > len(second):
+                return ""
+    queue = deque(char for char in graph if indegree[char] == 0)
+    order = []
+    while queue:
+        char = queue.popleft()
+        order.append(char)
+        for following in sorted(graph[char]):
+            indegree[following] -= 1
+            if indegree[following] == 0:
+                queue.append(following)
+    return "".join(order) if len(order) == len(graph) else ""

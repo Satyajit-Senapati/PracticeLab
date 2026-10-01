@@ -1,0 +1,4 @@
+{
+  "starter_code": "from __future__ import annotations\n\ndef longest_valid_parentheses(text: str) -> int:\n    raise NotImplementedError\n",
+  "tests": "assert longest_valid_parentheses(\"(()\") == 2\nassert longest_valid_parentheses(\")()())\") == 4\nassert longest_valid_parentheses(\"\") == 0\nassert longest_valid_parentheses(\"()(())\") == 6\nprint(\"Example checks passed.\")\n"
+}

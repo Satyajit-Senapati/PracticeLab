@@ -1,0 +1,4 @@
+{
+  "starter_code": "class SnakeGame:\n    def __init__(self, width: int, height: int, food: list[list[int]]):\n        raise NotImplementedError\n\n    def move(self, direction: str) -> int:\n        raise NotImplementedError\n",
+  "tests": "game = SnakeGame(3, 2, [[1,2],[0,1]])\nassert [game.move(d) for d in [\"R\",\"D\",\"R\",\"U\",\"L\",\"U\",\"D\"]] == [0,0,1,1,2,-1,-1]\ntail = SnakeGame(2, 2, [[0,1]])\nassert tail.move(\"R\") == 1\nassert tail.move(\"L\") == 1\nprint(\"Example checks passed.\")\n"
+}

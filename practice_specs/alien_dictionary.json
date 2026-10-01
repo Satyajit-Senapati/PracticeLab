@@ -1,0 +1,4 @@
+{
+  "starter_code": "from __future__ import annotations\n\ndef alien_order(words: list[str]) -> str:\n    raise NotImplementedError\n",
+  "tests": "assert alien_order([\"wrt\", \"wrf\", \"er\", \"ett\", \"rftt\"]) == \"wertf\"\nassert alien_order([\"abc\", \"ab\"]) == \"\"\nassert alien_order([\"z\", \"x\", \"z\"]) == \"\"\nassert set(alien_order([\"abc\"])) == set(\"abc\")\nprint(\"Example checks passed.\")\n"
+}

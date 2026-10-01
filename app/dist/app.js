@@ -11,6 +11,11 @@ const elements = {
   search: $("#problem-search"),
   difficultyFilters: $("#difficulty-filters"),
   topicFilter: $("#topic-filter"),
+  statusFilter: $("#status-filter"),
+  filterSummary: $("#filter-summary"),
+  clearFilters: $("#clear-filters"),
+  practiceStatus: $("#practice-status"),
+  jumpToEditor: $("#jump-to-editor"),
   problemList: $("#problem-list"),
   emptyList: $("#empty-list"),
   problemMeta: $("#problem-meta"),
@@ -57,6 +62,7 @@ const state = {
   selectedId: null,
   difficulty: "all",
   topic: "all",
+  status: "all",
   query: "",
   localMode: false,
   progress: loadJson(STORAGE_KEY, {}),
@@ -201,6 +207,32 @@ function requestedProblemId() {
   catch { return ""; }
 }
 
+function canonicalProblemId(id) {
+  return state.problems.find((problem) => problem.id === id || problem.aliases?.includes(id))?.id ?? id;
+}
+
+function migrateAliasProgress() {
+  let changed = false;
+  for (const problem of state.problems) {
+    const drafts = [problem.id, ...(problem.aliases ?? [])]
+      .map((id) => state.progress[id]).filter(Boolean);
+    if (state.progress[problem.id]?.aliasesMigrated || !drafts.length
+      || !problem.aliases?.some((id) => state.progress[id])) continue;
+    const latest = drafts.reduce((current, draft) =>
+      (draft.updatedAt ?? "") > (current.updatedAt ?? "") ? draft : current);
+    const status = drafts.some((draft) => draft.status === "solved") ? "solved"
+      : drafts.some((draft) => draft.status === "attempted") ? "attempted" : "new";
+    const merged = { ...latest, status, aliasesMigrated: true,
+      solutionRevealed: drafts.some((draft) => draft.solutionRevealed) };
+    if (JSON.stringify(state.progress[problem.id]) !== JSON.stringify(merged)) {
+      state.progress[problem.id] = merged;
+      changed = true;
+    }
+  }
+  // Keep the original alias records so alternate saved drafts remain recoverable.
+  if (changed) saveJson(STORAGE_KEY, state.progress);
+}
+
 function selectedProblem() {
   return state.problems.find((problem) => problem.id === state.selectedId);
 }
@@ -283,7 +315,8 @@ async function loadCatalog() {
     return { ...problem, file: `problems/${problem.file}` };
   });
   const merged = new Map(catalog.problems.map((problem) => [problem.id, problem]));
-  const localOnlyProblems = state.customProblems.filter((problem) => !merged.has(problem.id));
+  const knownIds = new Set(catalog.problems.flatMap((problem) => [problem.id, ...(problem.aliases ?? [])]));
+  const localOnlyProblems = state.customProblems.filter((problem) => !knownIds.has(problem.id));
   if (localOnlyProblems.length !== state.customProblems.length) {
     state.customProblems = localOnlyProblems;
     customCatalogChanged = true;
@@ -291,11 +324,12 @@ async function loadCatalog() {
   if (customCatalogChanged) saveJson(CUSTOM_KEY, state.customProblems);
   for (const problem of localOnlyProblems) merged.set(problem.id, problem);
   state.problems = [...merged.values()].sort((a, b) => a.title.localeCompare(b.title));
+  migrateAliasProgress();
   elements.problemCount.textContent = state.problems.length;
   populateTopics();
   applyFilters();
 
-  const requestedId = requestedProblemId();
+  const requestedId = canonicalProblemId(requestedProblemId());
   const initial = state.problems.find((problem) => problem.id === requestedId) ?? state.filtered[0] ?? state.problems[0];
   if (initial) selectProblem(initial.id, { updateHash: false });
 }
@@ -321,7 +355,8 @@ function applyFilters() {
     const searchable = [problem.title, problem.file, problem.topic, ...(problem.concepts ?? []), ...(problem.companies ?? [])]
       .join(" ")
       .toLowerCase();
-    return difficultyMatches && topicMatches && (!query || searchable.includes(query));
+    const statusMatches = state.status === "all" || statusFor(problem) === state.status;
+    return difficultyMatches && topicMatches && statusMatches && (!query || searchable.includes(query));
   });
   renderProblemList();
 }
@@ -348,6 +383,9 @@ function renderProblemList() {
     })
     .join("");
   elements.emptyList.hidden = state.filtered.length > 0;
+  elements.filterSummary.textContent = `${state.filtered.length} of ${state.problems.length} shown`;
+  elements.clearFilters.hidden = !state.query.trim() && state.difficulty === "all"
+    && state.topic === "all" && state.status === "all";
 }
 
 function updateProgressSummary() {
@@ -385,6 +423,7 @@ function saveActiveDraft({ immediate = false } = {}) {
 }
 
 function selectProblem(id, { updateHash = true, focusListItem = false } = {}) {
+  id = canonicalProblemId(id);
   const problem = state.problems.find((item) => item.id === id);
   if (!problem) return;
   if (state.selectedId) saveActiveDraft({ immediate: true });
@@ -407,6 +446,8 @@ function selectProblem(id, { updateHash = true, focusListItem = false } = {}) {
   elements.runButton.disabled = state.running;
   elements.resetButton.disabled = false;
   elements.stdinEditor.disabled = false;
+  elements.jumpToEditor.disabled = false;
+  elements.autosaveStatus.classList.toggle("is-error", state.storageWarningShown);
   elements.autosaveStatus.textContent = draft.updatedAt ? "Draft restored" : "Drafts save automatically";
   if (state.storageWarningShown) elements.autosaveStatus.textContent = "Kept in this tab · check storage";
   if (changed) {
@@ -426,7 +467,9 @@ function renderProblem(problem) {
   elements.problemMeta.innerHTML = badge(problem.difficulty, levelClass) + badge(problem.topic);
   elements.problemTitle.textContent = problem.title;
   elements.fileName.textContent = problem.file;
-  const isSolved = statusFor(problem) === "solved";
+  const status = statusFor(problem);
+  elements.practiceStatus.textContent = { new: "Not started", attempted: "Attempted", solved: "Solved" }[status];
+  const isSolved = status === "solved";
   elements.solveButton.classList.toggle("is-solved", isSolved);
   elements.solveButton.setAttribute("aria-pressed", String(isSolved));
   elements.solveButton.setAttribute("aria-label", isSolved ? "Mark as unsolved" : "Mark as solved");
@@ -572,7 +615,8 @@ async function runCode() {
     const current = draftFor(problem);
     state.progress[problem.id] = { ...current, status: current.status === "solved" ? "solved" : "attempted" };
     saveActiveDraft({ immediate: true });
-    renderProblemList();
+    applyFilters();
+    elements.practiceStatus.textContent = statusFor(problem) === "solved" ? "Solved" : "Attempted";
     const combined = tests ? `${code}\n\n# --- Tests ---\n${tests}\n` : `${code}\n`;
     const result = await state.runner.run(combined, elements.stdinEditor.value);
     const output = [result.stdout, result.stderr].filter(Boolean).join(result.stdout && result.stderr ? "\n" : "");
@@ -731,6 +775,26 @@ function bindEvents() {
     applyFilters();
   });
 
+  elements.statusFilter.addEventListener("change", () => {
+    state.status = elements.statusFilter.value;
+    applyFilters();
+  });
+  elements.clearFilters.addEventListener("click", () => {
+    state.query = "";
+    state.difficulty = "all";
+    state.topic = "all";
+    state.status = "all";
+    elements.search.value = "";
+    elements.topicFilter.value = "all";
+    elements.statusFilter.value = "all";
+    applyFilters();
+    elements.search.focus();
+  });
+  elements.jumpToEditor.addEventListener("click", () => {
+    elements.codeEditor.focus({ preventScroll: true });
+    $("#workbench").scrollIntoView({ behavior: "auto", block: "start" });
+  });
+
   elements.promptTab.addEventListener("click", () =>
     activateTabs(elements.promptTab, elements.solutionTab, elements.promptView, elements.solutionView),
   );
@@ -798,7 +862,7 @@ function bindEvents() {
     state.progress[problem.id] = { ...current, status: current.status === "solved" ? "attempted" : "solved" };
     saveProgress();
     renderProblem(problem);
-    renderProblemList();
+    applyFilters();
   });
 
   elements.addProblemButton.addEventListener("click", () => elements.addProblemDialog.showModal());
@@ -817,6 +881,8 @@ function bindEvents() {
       state.query = "";
       state.difficulty = "all";
       state.topic = "all";
+      state.status = "all";
+      elements.statusFilter.value = "all";
       elements.search.value = "";
       populateTopics();
       applyFilters();

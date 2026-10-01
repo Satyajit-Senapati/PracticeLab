@@ -1,0 +1,4 @@
+{
+  "starter_code": "from __future__ import annotations\n\ndef sort_colors(nums: List[int]) -> None:\n    raise NotImplementedError\n",
+  "tests": "values = [2,0,2,1,1,0]\nassert sort_colors(values) is None\nassert values == [0,0,1,1,2,2]\nprint(\"Example checks passed.\")\n"
+}

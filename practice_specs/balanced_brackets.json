@@ -1,0 +1,6 @@
+{
+  "title": "Balanced Brackets",
+  "category": "Stacks & Queues",
+  "starter_code": "from __future__ import annotations\n\ndef balanced_brackets(text: str) -> bool:\n    raise NotImplementedError\n",
+  "tests": "assert balanced_brackets(\"a{b[c](d)}\")\nassert not balanced_brackets(\"([)]\")\nassert balanced_brackets(\"\")\nassert not balanced_brackets(\"]\")\nprint(\"Example checks passed.\")\n"
+}

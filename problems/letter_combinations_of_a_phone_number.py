@@ -29,3 +29,22 @@ Alternative Approaches: Use iterative product construction.
 Expected Output: The script prints all letter combos for sample digits.
 Key Takeaways: Backtracking cleanly generates all combinations from digit mappings.
 """
+
+def letter_combinations(digits: str) -> list[str]:
+    """Generate keypad combinations; reject digits outside 2 through 9."""
+    if not digits:
+        return []
+    mapping = dict(zip("23456789", ("abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz")))
+    if any(digit not in mapping for digit in digits):
+        raise ValueError("Digits must be between 2 and 9.")
+    result = []
+    def search(index, path):
+        if index == len(digits):
+            result.append("".join(path))
+            return
+        for char in mapping[digits[index]]:
+            path.append(char)
+            search(index + 1, path)
+            path.pop()
+    search(0, [])
+    return result

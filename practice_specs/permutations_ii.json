@@ -1,0 +1,4 @@
+{
+  "starter_code": "from __future__ import annotations\n\ndef permute_unique(nums: list[int]) -> list[list[int]]:\n    raise NotImplementedError\n",
+  "tests": "assert {tuple(x) for x in permute_unique([1,1,2])} == {(1,1,2),(1,2,1),(2,1,1)}\nassert permute_unique([]) == [[]]\nvalues = [2,1,1]\npermute_unique(values)\nassert values == [2,1,1]\nprint(\"Example checks passed.\")\n"
+}

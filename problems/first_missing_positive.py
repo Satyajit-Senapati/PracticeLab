@@ -29,3 +29,15 @@ Alternative Approaches: Use a set with O(n) time and O(n) space.
 Expected Output: The script prints the smallest missing positive integer for sample input.
 Key Takeaways: Index-based placement enables constant extra space solutions.
 """
+
+def first_missing_positive(nums: list[int]) -> int:
+    """Find the first missing positive by rearranging nums in place."""
+    size = len(nums)
+    for index in range(size):
+        while 1 <= nums[index] <= size and nums[nums[index] - 1] != nums[index]:
+            destination = nums[index] - 1
+            nums[index], nums[destination] = nums[destination], nums[index]
+    for index, value in enumerate(nums, 1):
+        if value != index:
+            return index
+    return size + 1

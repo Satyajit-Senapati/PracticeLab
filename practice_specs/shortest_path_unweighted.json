@@ -1,0 +1,6 @@
+{
+  "title": "Shortest Path in an Unweighted Graph",
+  "category": "Graphs",
+  "starter_code": "from __future__ import annotations\n\ndef shortest_path(graph: dict, start, goal) -> list:\n    raise NotImplementedError\n",
+  "tests": "assert shortest_path({\"a\":[\"b\"],\"b\":[\"c\"]}, \"a\", \"c\") == [\"a\",\"b\",\"c\"]\nassert shortest_path({\"a\":[\"a\",\"b\"],\"b\":[]}, \"a\", \"missing\") == []\nassert shortest_path({}, None, None) == [None]\nprint(\"Example checks passed.\")\n"
+}

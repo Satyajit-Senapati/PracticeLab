@@ -44,6 +44,8 @@ from typing import Dict, List
 
 def ladder_length(begin_word: str, end_word: str, word_list: List[str]) -> int:
     """Return the length of the shortest transformation sequence."""
+    if begin_word == end_word:
+        return 1
     if end_word not in word_list:
         return 0
 

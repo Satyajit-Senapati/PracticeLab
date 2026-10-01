@@ -1,0 +1,6 @@
+{
+  "title": "Group Records by Field",
+  "category": "Python",
+  "starter_code": "from __future__ import annotations\n\ndef group_records(records, field: str) -> dict:\n    raise NotImplementedError\n",
+  "tests": "records = [{\"team\":\"A\",\"id\":1},{\"team\":\"B\",\"id\":2},{\"team\":\"A\",\"id\":3}]\nassert group_records(records, \"team\") == {\"A\": [records[0], records[2]], \"B\": [records[1]]}\nassert group_records([], \"team\") == {}\nprint(\"Example checks passed.\")\n"
+}
